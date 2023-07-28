@@ -36,7 +36,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         String secretKey = details.getSecretKey();
         if (secretKey == null || !"secret".equals(secretKey)) {
-            throw new InsufficientAuthenticationException("InsufficientAuthenticationException");
+            throw new InsufficientAuthenticationException("Invalid Secret");
         }
 
 
