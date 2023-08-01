@@ -30,7 +30,10 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
 
-
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(ajaxAuthenticationProvider());
+    }
 
 
 
@@ -49,6 +52,10 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
         ;
     }
 
+    @Bean
+    public AuthenticationProvider ajaxAuthenticationProvider() {
+        return new AjaxAuthenticationProvider(userDetailsService, passwordEncoder);
+    }
 
 
 
