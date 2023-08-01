@@ -1,7 +1,8 @@
 package com.lightshoes.corespringsecurity.security.configs;
 
-import com.lightshoes.corespringsecurity.security.filter.AjaxLoginProcessingFilter;
 import com.lightshoes.corespringsecurity.security.handler.CustomAccessDeniedHandler;
+import com.lightshoes.corespringsecurity.security.handler.CustomAuthenticationFailureHandler;
+import com.lightshoes.corespringsecurity.security.handler.CustomAuthenticationSuccessHandler;
 import com.lightshoes.corespringsecurity.security.provider.CustomAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -9,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationDetailsSource;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,9 +20,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
 @Configuration
@@ -30,9 +27,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final AuthenticationFailureHandler authenticationFailureHandler;
+    private final CustomAuthenticationFailureHandler authenticationFailureHandler;
 
-    private final AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
 
     private final UserDetailsService userDetailsService;
 
