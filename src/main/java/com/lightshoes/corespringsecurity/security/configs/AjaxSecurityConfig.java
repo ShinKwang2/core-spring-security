@@ -57,14 +57,22 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
         return new AjaxAuthenticationProvider(userDetailsService, passwordEncoder);
     }
 
+    @Bean
+    public AuthenticationSuccessHandler ajaxAuthenticationSuccessHandler() {
+        return new AjaxAuthenticationSuccessHandler();
+    }
 
-
+    @Bean
+    public AuthenticationFailureHandler ajaxAuthenticationFailureHandler() {
+        return new AjaxAuthenticationFailureHandler();
+    }
 
     @Bean
     public AjaxLoginProcessingFilter ajaxLoginProcessingFilter() throws Exception {
         AjaxLoginProcessingFilter ajaxLoginProcessingFilter = new AjaxLoginProcessingFilter();
         ajaxLoginProcessingFilter.setAuthenticationManager(authenticationManagerBean());
-
+        ajaxLoginProcessingFilter.setAuthenticationSuccessHandler(ajaxAuthenticationSuccessHandler());
+        ajaxLoginProcessingFilter.setAuthenticationFailureHandler(ajaxAuthenticationFailureHandler());
         return ajaxLoginProcessingFilter;
     }
 
