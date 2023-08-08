@@ -1,7 +1,7 @@
 package com.lightshoes.corespringsecurity.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lightshoes.corespringsecurity.domain.AccountDto;
+import com.lightshoes.corespringsecurity.domain.dto.AccountCreateDto;
 import com.lightshoes.corespringsecurity.security.token.AjaxAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -29,12 +29,12 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
             throw new IllegalStateException("Authentication is not supported");
         }
 
-        AccountDto accountDto = objectMapper.readValue(request.getReader(), AccountDto.class);
-        if (!StringUtils.hasText(accountDto.getUsername()) || !StringUtils.hasText(accountDto.getPassword())) {
+        AccountCreateDto accountCreateDto = objectMapper.readValue(request.getReader(), AccountCreateDto.class);
+        if (!StringUtils.hasText(accountCreateDto.getUsername()) || !StringUtils.hasText(accountCreateDto.getPassword())) {
             throw new IllegalArgumentException("Username or Password is empty");
         }
 
-        AjaxAuthenticationToken authenticationToken = AjaxAuthenticationToken.unauthenticated(accountDto.getUsername(), accountDto.getPassword());
+        AjaxAuthenticationToken authenticationToken = AjaxAuthenticationToken.unauthenticated(accountCreateDto.getUsername(), accountCreateDto.getPassword());
 
         return getAuthenticationManager().authenticate(authenticationToken);
     }

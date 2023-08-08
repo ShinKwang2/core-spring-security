@@ -1,6 +1,6 @@
 package com.lightshoes.corespringsecurity.controller.login;
 
-import com.lightshoes.corespringsecurity.domain.Account;
+import com.lightshoes.corespringsecurity.domain.entity.Account;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;

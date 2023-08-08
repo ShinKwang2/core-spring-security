@@ -1,6 +1,6 @@
 package com.lightshoes.corespringsecurity.security.service;
 
-import com.lightshoes.corespringsecurity.domain.Account;
+import com.lightshoes.corespringsecurity.domain.entity.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 

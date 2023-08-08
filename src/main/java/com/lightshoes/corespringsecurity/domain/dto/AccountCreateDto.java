@@ -1,9 +1,12 @@
-package com.lightshoes.corespringsecurity.domain;
+package com.lightshoes.corespringsecurity.domain.dto;
 
+import com.lightshoes.corespringsecurity.domain.entity.Account;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
-public class AccountDto {
+public class AccountCreateDto {
 
     private String username;
 
@@ -13,15 +16,12 @@ public class AccountDto {
 
     private Integer age;
 
-    private String role;
-
     public Account toEntity() {
         return Account.builder()
                 .username(username)
                 .password(password)
                 .email(email)
                 .age(age)
-                .role(role)
                 .build();
     }
 }

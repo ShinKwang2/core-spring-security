@@ -1,7 +1,7 @@
 package com.lightshoes.corespringsecurity.security.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lightshoes.corespringsecurity.domain.Account;
+import com.lightshoes.corespringsecurity.domain.entity.Account;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
