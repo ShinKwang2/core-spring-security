@@ -1,6 +1,8 @@
 package com.lightshoes.corespringsecurity.service;
 
+import com.lightshoes.corespringsecurity.domain.entity.AccessIp;
 import com.lightshoes.corespringsecurity.domain.entity.Resources;
+import com.lightshoes.corespringsecurity.repository.AccessIpRepository;
 import com.lightshoes.corespringsecurity.repository.ResourcesRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.ConfigAttribute;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -20,6 +23,8 @@ import java.util.List;
 public class SecurityResourceService {
 
     private final ResourcesRepository resourcesRepository;
+
+    private final AccessIpRepository accessIpRepository;
 
     public LinkedHashMap<RequestMatcher, List<ConfigAttribute>> getResourceList() {
 
@@ -35,5 +40,11 @@ public class SecurityResourceService {
         });
 
         return result;
+    }
+
+    public List<String> getAcceptIpList() {
+        return accessIpRepository.findAll().stream()
+                .map(accessIp -> accessIp.getIpAddress())
+                .collect(Collectors.toList());
     }
 }

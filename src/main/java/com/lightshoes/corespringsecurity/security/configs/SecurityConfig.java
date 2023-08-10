@@ -7,6 +7,7 @@ import com.lightshoes.corespringsecurity.security.handler.CustomAuthenticationFa
 import com.lightshoes.corespringsecurity.security.handler.CustomAuthenticationSuccessHandler;
 import com.lightshoes.corespringsecurity.security.metadatasource.CustomFilterInvocationSecurityMetadataSource;
 import com.lightshoes.corespringsecurity.security.provider.CustomAuthenticationProvider;
+import com.lightshoes.corespringsecurity.security.voter.IpAddressVoter;
 import com.lightshoes.corespringsecurity.service.SecurityResourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -126,11 +127,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private AccessDecisionManager affirmativeBased() {
-        return new AffirmativeBased(getRoleHierarchyVoter());
+        return new AffirmativeBased(getVoters());
     }
 
-    private List<AccessDecisionVoter<? extends Object>> getRoleHierarchyVoter() {
-        return List.of(roleHierarchyVoter());
+    private List<AccessDecisionVoter<? extends Object>> getVoters() {
+        return List.of(ipAddressVoter(), roleHierarchyVoter());
+    }
+
+    private AccessDecisionVoter<?> ipAddressVoter() {
+        return new IpAddressVoter(securityResourceService);
     }
 
     private AccessDecisionVoter<?> roleHierarchyVoter() {
