@@ -2,10 +2,13 @@ package com.lightshoes.corespringsecurity.security.listener;
 
 import com.lightshoes.corespringsecurity.domain.entity.*;
 import com.lightshoes.corespringsecurity.repository.*;
+import com.lightshoes.corespringsecurity.security.metadatasource.CustomFilterInvocationSecurityMetadataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
+
     private static AtomicInteger count = new AtomicInteger(0);
 
     @Override
@@ -53,10 +59,29 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Transactional
     public void setupSecurityResources() {
         Role adminRole = createRoleIfNotFound("ROLE_ADMIN", "관리자");
-        ResourcesRole resourcesRole = ResourcesRole.createResourcesRole(adminRole);
-        AccountRole accountRole = AccountRole.createAccountRole(adminRole);
-        createResourceIfNotFound("/admin/**", "", resourcesRole, "url");
-        Account account = createUserIfNotFound("admin", "pass", "admin@gmail.com", 10,  accountRole);
+        ResourcesRole adminResourcesRole = ResourcesRole.createResourcesRole(adminRole);
+        AccountRole adminAccountRole = AccountRole.createAccountRole(adminRole);
+        createResourceIfNotFound("/admin/**", "", adminResourcesRole, "url");
+        createResourceIfNotFound("/config", "", adminResourcesRole, "url");
+
+        Account admin = createUserIfNotFound("admin", "pass", "admin@gmail.com", 10,  adminAccountRole);
+
+        Role managerRole = createRoleIfNotFound("ROLE_MANAGER", "매니저");
+        ResourcesRole managerResourcesRole = ResourcesRole.createResourcesRole(managerRole);
+        AccountRole managerAccountRole = AccountRole.createAccountRole(managerRole);
+        createResourceIfNotFound("/messages", "", managerResourcesRole, "url");
+        createUserIfNotFound("manager", "pass", "manager@gmail.com", 20, managerAccountRole);
+
+        Role userRole = createRoleIfNotFound("ROLE_USER", "사용자");
+        ResourcesRole userResourcesRole = ResourcesRole.createResourcesRole(userRole);
+        AccountRole userAccountRole = AccountRole.createAccountRole(userRole);
+        createResourceIfNotFound("/mypage", "", userResourcesRole, "url");
+        createUserIfNotFound("user", "pass", "user@gmail.com", 20, userAccountRole);
+
+        userRole.addParentRole(managerRole);
+        managerRole.addParentRole(adminRole);
+
+        ((CustomFilterInvocationSecurityMetadataSource) filterInvocationSecurityMetadataSource).reload();
 
 //        Set<Role> roles1 = new HashSet<>();
 //
