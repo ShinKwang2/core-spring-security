@@ -44,6 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AuthenticationDetailsSource authenticationDetailsSource;
 
+    private final UrlResourcesMapFactoryBean urlResourcesMapFactoryBean;
+
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //auth.userDetailsService(userDetailsService);
@@ -110,8 +113,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public FilterInvocationSecurityMetadataSource customFilterInvocationSecurityMetadataSource() {
-        return new CustomFilterInvocationSecurityMetadataSource();
+    public FilterInvocationSecurityMetadataSource customFilterInvocationSecurityMetadataSource() throws Exception {
+        return new CustomFilterInvocationSecurityMetadataSource(urlResourcesMapFactoryBean.getObject());
     }
 
     private AccessDecisionManager affirmativeBased() {
