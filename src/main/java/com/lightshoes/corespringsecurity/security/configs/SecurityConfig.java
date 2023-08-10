@@ -1,6 +1,7 @@
 package com.lightshoes.corespringsecurity.security.configs;
 
 import com.lightshoes.corespringsecurity.security.factory.UrlResourcesMapFactoryBean;
+import com.lightshoes.corespringsecurity.security.filter.PermitAllFilter;
 import com.lightshoes.corespringsecurity.security.handler.CustomAccessDeniedHandler;
 import com.lightshoes.corespringsecurity.security.handler.CustomAuthenticationFailureHandler;
 import com.lightshoes.corespringsecurity.security.handler.CustomAuthenticationSuccessHandler;
@@ -49,6 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UrlResourcesMapFactoryBean urlResourcesMapFactoryBean;
 
     private final SecurityResourceService securityResourceService;
+
+    private final String[] permitAllResources = {"/", "/login", "/user/login/**"};
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -108,7 +111,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public FilterSecurityInterceptor cutomFilterSecurityInterceptor() throws Exception {
 
-        FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
+        FilterSecurityInterceptor filterSecurityInterceptor = new PermitAllFilter(permitAllResources);
         filterSecurityInterceptor.setSecurityMetadataSource(customFilterInvocationSecurityMetadataSource());
         filterSecurityInterceptor.setAccessDecisionManager(affirmativeBased());
         filterSecurityInterceptor.setAuthenticationManager(authenticationManagerBean());
