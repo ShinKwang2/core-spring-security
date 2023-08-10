@@ -14,4 +14,6 @@ public interface RoleService {
     Long createRole(RoleDto role);
 
     Long deleteRole(Long id);
+
+    String findAllHierarchy();
 }

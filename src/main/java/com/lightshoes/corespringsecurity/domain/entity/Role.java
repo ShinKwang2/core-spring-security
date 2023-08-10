@@ -31,6 +31,13 @@ public class Role {
     @OneToMany(mappedBy = "role")
     private Set<AccountRole> accountRoles = new HashSet<>();
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Role parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private Set<Role> childRoles = new HashSet<>();
+
     @Builder
     private Role(String roleName, String roleDesc) {
         this.roleName = roleName;
@@ -44,5 +51,14 @@ public class Role {
 
     public void addResourcesRole(ResourcesRole resourcesRole) {
         this.resourceRoles.add(resourcesRole);
+    }
+
+    public void addParentRole(Role role) {
+        parent = role;
+        role.addChildRole(this);
+    }
+
+    private void addChildRole(Role role) {
+        childRoles.add(role);
     }
 }

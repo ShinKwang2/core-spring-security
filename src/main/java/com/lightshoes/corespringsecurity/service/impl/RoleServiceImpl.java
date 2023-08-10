@@ -32,14 +32,32 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     public Long createRole(RoleDto request) {
         Role savdeRole = roleRepository.save(request.toEntity());
         return savdeRole.getId();
     }
 
     @Override
+    @Transactional
     public Long deleteRole(Long id) {
         roleRepository.deleteById(id);
         return id;
+    }
+
+    @Override
+    public String findAllHierarchy() {
+        List<Role> roles = roleRepository.findAll();
+
+        StringBuilder concatedRoles = new StringBuilder();
+        roles.forEach(role -> {
+            if (role.getParent() != null) {
+                concatedRoles.append(role.getParent().getRoleName());
+                concatedRoles.append(" > ");
+                concatedRoles.append(role.getRoleName());
+                concatedRoles.append("\n");
+            }
+        });
+        return concatedRoles.toString();
     }
 }
