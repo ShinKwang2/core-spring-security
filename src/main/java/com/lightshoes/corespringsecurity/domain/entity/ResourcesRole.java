@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "resources_role")
+@Table(name = "RESOURCES_ROLE")
 public class ResourcesRole {
 
     @Id
