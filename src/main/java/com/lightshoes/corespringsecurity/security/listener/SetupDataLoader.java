@@ -38,6 +38,9 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private AccessIpRepository accessIpRepository;
+
+    @Autowired
     FilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
 
     private static AtomicInteger count = new AtomicInteger(0);
@@ -80,6 +83,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         userRole.addParentRole(managerRole);
         managerRole.addParentRole(adminRole);
+
+        setUpAccessIpData();
 
         ((CustomFilterInvocationSecurityMetadataSource) filterInvocationSecurityMetadataSource).reload();
 
@@ -150,5 +155,15 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
         resourcesRoleRepository.save(resourcesRole);
         return resourcesRepository.save(resources);
+    }
+    
+    private void setUpAccessIpData() {
+        AccessIp foundAccessIp = accessIpRepository.findByIpAddress("0:0:0:0:0:0:0:1");
+        if (foundAccessIp == null) {
+            AccessIp accessIp = AccessIp.builder()
+                    .ipAddress("0:0:0:0:0:0:0:1")
+                    .build();
+            accessIpRepository.save(accessIp);
+        }
     }
 }
