@@ -1,10 +1,12 @@
 package com.lightshoes.corespringsecurity.security.configs;
 
+import com.lightshoes.corespringsecurity.security.factory.UrlResourcesMapFactoryBean;
 import com.lightshoes.corespringsecurity.security.handler.CustomAccessDeniedHandler;
 import com.lightshoes.corespringsecurity.security.handler.CustomAuthenticationFailureHandler;
 import com.lightshoes.corespringsecurity.security.handler.CustomAuthenticationSuccessHandler;
 import com.lightshoes.corespringsecurity.security.metadatasource.CustomFilterInvocationSecurityMetadataSource;
 import com.lightshoes.corespringsecurity.security.provider.CustomAuthenticationProvider;
+import com.lightshoes.corespringsecurity.service.SecurityResourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -46,6 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UrlResourcesMapFactoryBean urlResourcesMapFactoryBean;
 
+    private final SecurityResourceService securityResourceService;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -114,7 +117,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public FilterInvocationSecurityMetadataSource customFilterInvocationSecurityMetadataSource() throws Exception {
-        return new CustomFilterInvocationSecurityMetadataSource(urlResourcesMapFactoryBean.getObject());
+        return new CustomFilterInvocationSecurityMetadataSource(urlResourcesMapFactoryBean.getObject(), securityResourceService);
     }
 
     private AccessDecisionManager affirmativeBased() {

@@ -49,8 +49,9 @@ public class ResourcesServiceImpl implements ResourcesService {
     @Transactional
     @Override
     public Long createResources(ResourcesDto request) {
-
-        Resources resources = request.toEntity();
+        Resources resources = resourcesRepository.findResourcesByResourceName(request.getResourceName())
+                .orElse(request.toEntity());
+        resources.getResourceRoles().clear();
 
         Role role = roleRepository.findByRoleName(request.getRoleName());
         ResourcesRole resourcesRole = ResourcesRole.createResourcesRole(role);

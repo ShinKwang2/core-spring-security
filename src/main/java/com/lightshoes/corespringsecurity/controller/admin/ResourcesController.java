@@ -5,6 +5,7 @@ import com.lightshoes.corespringsecurity.domain.dto.ResourcesResponseDto;
 import com.lightshoes.corespringsecurity.domain.entity.Resources;
 import com.lightshoes.corespringsecurity.domain.entity.Role;
 import com.lightshoes.corespringsecurity.repository.RoleRepository;
+import com.lightshoes.corespringsecurity.security.metadatasource.CustomFilterInvocationSecurityMetadataSource;
 import com.lightshoes.corespringsecurity.service.ResourcesService;
 import com.lightshoes.corespringsecurity.service.RoleService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,8 @@ public class ResourcesController {
 
     private final RoleService roleService;
 
+    private final CustomFilterInvocationSecurityMetadataSource customFilterInvocationSecurityMetadataSource;
+
     @GetMapping("/admin/resources")
     public String getResources(Model model) throws Exception {
 
@@ -40,6 +43,7 @@ public class ResourcesController {
     @PostMapping("/admin/resources")
     public String createResources(ResourcesDto resourcesDto) throws Exception {
         resourceService.createResources(resourcesDto);
+        customFilterInvocationSecurityMetadataSource.reload();
 
         return "redirect:/admin/resources";
 
@@ -63,7 +67,10 @@ public class ResourcesController {
     @GetMapping("/admin/resources/{id}")
     public String getResources(@PathVariable Long id, Model model) throws Exception {
         ResourcesResponseDto resources = resourceService.getResources(id);
+        List<Role> roles = roleService.getRoles();
+
         model.addAttribute("resources", resources);
+        model.addAttribute("roleList", roles);
 
         return "admin/resource/detail";
     }
@@ -71,6 +78,7 @@ public class ResourcesController {
     @GetMapping("/admin/resources/delete/{id}")
     public String removeResources(@PathVariable Long id, Model model) throws Exception {
         resourceService.deleteResources(id);
+        customFilterInvocationSecurityMetadataSource.reload();
 
         return "redirect:/admin/resources";
     }

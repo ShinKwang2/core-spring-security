@@ -31,7 +31,7 @@ public class Resources {
     @Column(name = "resource_type")
     private String resourceType;
 
-    @OneToMany(mappedBy = "resources", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "resources", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ResourcesRole> resourceRoles = new HashSet<>();
 
     @Builder

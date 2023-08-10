@@ -1,5 +1,6 @@
 package com.lightshoes.corespringsecurity.security.metadatasource;
 
+import com.lightshoes.corespringsecurity.service.SecurityResourceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.FilterInvocation;
@@ -14,6 +15,7 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
 
     private final LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap;
 
+    private final SecurityResourceService securityResourceService;
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
@@ -41,5 +43,17 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
     @Override
     public boolean supports(Class<?> clazz) {
         return FilterInvocation.class.isAssignableFrom(clazz);
+    }
+
+    public void reload() {
+        LinkedHashMap<RequestMatcher, List<ConfigAttribute>> reloadedMap = securityResourceService.getResourceList();
+        Iterator<Map.Entry<RequestMatcher, List<ConfigAttribute>>> iterator = reloadedMap.entrySet().iterator();
+
+        requestMap.clear();
+
+        while (iterator.hasNext()) {
+            Map.Entry<RequestMatcher, List<ConfigAttribute>> entry = iterator.next();
+            requestMap.put(entry.getKey(), entry.getValue());
+        }
     }
 }
