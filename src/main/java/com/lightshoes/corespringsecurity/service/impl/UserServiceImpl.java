@@ -13,6 +13,7 @@ import com.lightshoes.corespringsecurity.repository.UserRepository;
 import com.lightshoes.corespringsecurity.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,5 +96,12 @@ public class UserServiceImpl implements UserService {
     public Long deleteUser(Long id) {
         userRepository.deleteById(id);
         return id;
+    }
+
+    @Override
+    @Secured("ROLE_MANAGER")
+    public String order() {
+        System.out.println("order");
+        return "order";
     }
 }
