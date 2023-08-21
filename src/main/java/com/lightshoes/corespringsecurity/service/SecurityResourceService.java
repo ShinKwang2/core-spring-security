@@ -1,6 +1,5 @@
 package com.lightshoes.corespringsecurity.service;
 
-import com.lightshoes.corespringsecurity.domain.entity.AccessIp;
 import com.lightshoes.corespringsecurity.domain.entity.Resources;
 import com.lightshoes.corespringsecurity.repository.AccessIpRepository;
 import com.lightshoes.corespringsecurity.repository.ResourcesRepository;
@@ -26,10 +25,10 @@ public class SecurityResourceService {
 
     private final AccessIpRepository accessIpRepository;
 
-    public LinkedHashMap<RequestMatcher, List<ConfigAttribute>> getResourceList() {
+    public LinkedHashMap<RequestMatcher, List<ConfigAttribute>> getUrlResourceList() {
 
         LinkedHashMap<RequestMatcher, List<ConfigAttribute>> result = new LinkedHashMap<>();
-        List<Resources> resources = resourcesRepository.findAllResources();
+        List<Resources> resources = resourcesRepository.findAllUrlResources();
 
         resources.forEach(resource -> {
             List<ConfigAttribute> configAttributes = new ArrayList<>();
@@ -39,6 +38,20 @@ public class SecurityResourceService {
             result.put(new AntPathRequestMatcher(resource.getResourceName()), configAttributes);
         });
 
+        return result;
+    }
+
+    public LinkedHashMap<String, List<ConfigAttribute>> getMethodResourceList() {
+        LinkedHashMap<String, List<ConfigAttribute>> result = new LinkedHashMap<>();
+        List<Resources> resources = resourcesRepository.findAllMethodResources();
+
+        resources.forEach(resource -> {
+            List<ConfigAttribute> configAttributes = new ArrayList<>();
+            resource.getResourceRoles().forEach(resourcesRole -> {
+                configAttributes.add(new SecurityConfig(resourcesRole.getRole().getRoleName()));
+            });
+            result.put(resource.getResourceName(), configAttributes);
+        });
         return result;
     }
 
