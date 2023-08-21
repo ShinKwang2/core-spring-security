@@ -46,7 +46,7 @@ public class CustomFilterInvocationSecurityMetadataSource implements FilterInvoc
     }
 
     public void reload() {
-        LinkedHashMap<RequestMatcher, List<ConfigAttribute>> reloadedMap = securityResourceService.getResourceList();
+        LinkedHashMap<RequestMatcher, List<ConfigAttribute>> reloadedMap = securityResourceService.getUrlResourceList();
         Iterator<Map.Entry<RequestMatcher, List<ConfigAttribute>>> iterator = reloadedMap.entrySet().iterator();
 
         requestMap.clear();

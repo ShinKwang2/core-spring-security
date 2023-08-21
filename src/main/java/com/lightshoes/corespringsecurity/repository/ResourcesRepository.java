@@ -12,7 +12,7 @@ public interface ResourcesRepository extends JpaRepository<Resources, Long> {
     Resources findByResourceNameAndHttpMethod(String resourceName, String httpMethod);
 
     @Query("select r from Resources r join fetch r.resourceRoles where r.resourceType = 'url' order by r.orderNum desc")
-    List<Resources> findAllResources();
+    List<Resources> findAllUrlResources();
 
     @Query("select r from Resources r join fetch r.resourceRoles where r.resourceType = 'method' order by r.orderNum desc")
     List<Resources> findAllMethodResources();
