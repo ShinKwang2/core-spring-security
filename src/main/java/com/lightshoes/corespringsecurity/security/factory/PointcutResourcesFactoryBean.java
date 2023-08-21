@@ -3,8 +3,10 @@ package com.lightshoes.corespringsecurity.security.factory;
 import com.lightshoes.corespringsecurity.service.SecurityResourceService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityConfig;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
@@ -12,7 +14,7 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public class MethodResourcesFactoryBean implements FactoryBean<LinkedHashMap<String, List<ConfigAttribute>>> {
+public class PointcutResourcesFactoryBean implements FactoryBean<LinkedHashMap<String, List<ConfigAttribute>>> {
 
     private final SecurityResourceService securityResourceService;
 
@@ -39,6 +41,9 @@ public class MethodResourcesFactoryBean implements FactoryBean<LinkedHashMap<Str
     }
 
     private void init() {
-        resourceMap = securityResourceService.getMethodResourceList();
+        LinkedHashMap<String, List<ConfigAttribute>> temp = new LinkedHashMap<>();
+        temp.put("execution(* com.lightshoes.service.*Service.*(..))", List.of(new SecurityConfig("ROLE_USER")));
+        resourceMap = temp;
+//        resourceMap = securityResourceService.getPointcutResourceList();
     }
 }
