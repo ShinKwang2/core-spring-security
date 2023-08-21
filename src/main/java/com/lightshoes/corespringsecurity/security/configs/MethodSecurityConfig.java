@@ -48,23 +48,23 @@ public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
         return new PointcutResourcesFactoryBean(securityResourceService, "pointcut");
     }
 
-    @Bean
-    BeanPostProcessor protectPointcutPostProcessor() throws Exception {
-
-        Class<?> clazz = Class.forName("org.springframework.security.config.method.ProtectPointcutPostProcessor");
-        Constructor<?> declaredConstructor = clazz.getDeclaredConstructor(MapBasedMethodSecurityMetadataSource.class);
-        declaredConstructor.setAccessible(true);
-        Object instance = declaredConstructor.newInstance(new MapBasedMethodSecurityMetadataSource());
-
-
-        Method setPointcutMap = instance.getClass().getMethod("setPointcutMap", Map.class);
-        setPointcutMap.setAccessible(true);
-
-        LinkedHashMap<String, List<ConfigAttribute>> temp = new LinkedHashMap<>();
-        temp.put("execution(* com.lightshoes.service.*Service.*(..))", List.of(new SecurityConfig("ROLE_USER")));
-
-        setPointcutMap.invoke(instance, temp);
-
-        return (BeanPostProcessor) instance;
-    }
+//    @Bean
+//    BeanPostProcessor protectPointcutPostProcessor() throws Exception {
+//
+//        Class<?> clazz = Class.forName("org.springframework.security.config.method.ProtectPointcutPostProcessor");
+//        Constructor<?> declaredConstructor = clazz.getDeclaredConstructor(MapBasedMethodSecurityMetadataSource.class);
+//        declaredConstructor.setAccessible(true);
+//        Object instance = declaredConstructor.newInstance(new MapBasedMethodSecurityMetadataSource());
+//
+//
+//        Method setPointcutMap = instance.getClass().getMethod("setPointcutMap", Map.class);
+//        setPointcutMap.setAccessible(true);
+//
+//        LinkedHashMap<String, List<ConfigAttribute>> temp = new LinkedHashMap<>();
+//        temp.put("execution(* com.lightshoes.service.*Service.*(..))", List.of(new SecurityConfig("ROLE_USER")));
+//
+//        setPointcutMap.invoke(instance, temp);
+//
+//        return (BeanPostProcessor) instance;
+//    }
 }
