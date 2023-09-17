@@ -105,7 +105,7 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
 //        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 //    }
 
-    @Override
+    @Bean
     public AuthenticationManager authenticationManager() throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
